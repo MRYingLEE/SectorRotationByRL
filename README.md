@@ -16,7 +16,11 @@ I use the popular Chinese sector indice of SWS http://www.swsindex.com/idx0130.a
 config.json- the configuration file for training or testing settings:
 
 ```javascript
-{"train_start_date": "2014-02-21", "train_end_date": "2018-04-27", "test_start_date": "2018-05-02", "test_end_date": "2019-04-30", "codes": ["801010.XSHE",    "801020.XSHE",    "801030.XSHE",    "801040.XSHE",    "801050.XSHE",    "801080.XSHE",    "801110.XSHE",    "801120.XSHE",    "801130.XSHE",    "801140.XSHE",    "801150.XSHE",    "801160.XSHE",    "801170.XSHE",    "801180.XSHE",    "801200.XSHE",    "801210.XSHE",    "801230.XSHE",    "801710.XSHE",    "801720.XSHE",    "801730.XSHE",    "801740.XSHE",    "801750.XSHE",    "801760.XSHE",    "801770.XSHE",    "801780.XSHE",    "801790.XSHE",    "801880.XSHE",    "801890.XSHE"]}
+{
+"train_start_date": "2014-02-21", "train_end_date": "2018-04-27",
+"test_start_date": "2018-05-02", "test_end_date": "2019-04-30", 
+
+"codes": ["801010.XSHE",    "801020.XSHE",    "801030.XSHE",    "801040.XSHE",    "801050.XSHE",    "801080.XSHE",    "801110.XSHE",    "801120.XSHE",    "801130.XSHE",    "801140.XSHE",    "801150.XSHE",    "801160.XSHE",    "801170.XSHE",    "801180.XSHE",    "801200.XSHE",    "801210.XSHE",    "801230.XSHE",    "801710.XSHE",    "801720.XSHE",    "801730.XSHE",    "801740.XSHE",    "801750.XSHE",    "801760.XSHE",    "801770.XSHE",    "801780.XSHE",    "801790.XSHE",    "801880.XSHE",    "801890.XSHE"]}
 ```
 
 ## What's the results?
