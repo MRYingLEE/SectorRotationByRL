@@ -1,128 +1,45 @@
-# Reinforcement learning in portfolio management
+# The original repo is to use reinforcement learning in portfolio management
 
-## Introduction
+# This repo uses in a special situation of portfolio management, sector allocation.
 
-Motivated by "A Deep Reinforcement Learning Framework for the Financial Portfolio Management Problem" by [Jiang et. al. 2017](https://arxiv.org/abs/1706.10059) [1]. In this project:
-+ Implement three state-of-art continous deep reinforcement learning algorithms, Deep Deterministic Policy Gradient (DDPG),Proximal Policy Optimization(PPO) and Policy Gradient (PG) in portfolio management. 
+## Why sector allocation?
+Different from a general portfolio management, sector allocation decides weights on different sectors.
 
-+ Experiments on different settings, such as changing learning rates, optimizers, neutral network structures, China/America Stock data, initializers, noise, features to figure out their influence on the RL agents' performance(cumulative return).
+Sector allocation is based on sector rotation (https://www.investopedia.com/articles/trading/05/020305.asp). sector rotation has academic evidence. Also, when we decide weights on sectors instead of names, we don't need to take company specific information into consideration. So that sector allocation is much more suitable for reinforcement learning.
 
-  In this paper, we implement three state-of-art continuous reinforcement learning algorithms, Deep Deterministic Policy Gradient (DDPG), Proximal Policy Optimization (PPO) and Policy Gradient (PG)in portfolio management. All of them are widely-used in game playing and robot control. What's more, PPO has appealing theoretical propeties which is hopefully potential in portfolio management. We present the performances of them under different settings, including different learning rates, objective functions, feature combinations, in order to provide insights for parameters tuning, features selection and data preparation. We also conduct intensive experiments in China Stock market and show that PG is more desirable in financial market than DDPG and PPO, although both of them are more advanced. What's more, we propose a so called Adversarial Training method and show that it can greatly improve the training efficiency and significantly promote average daily return and sharpe ratio in back test. Based on this new modification, our experiments results show that our agent based on Policy Gradient can outperform UCRP.
-## Using the environment
+## What's the data?
 
-The environment provides supports for easily testing different reinforcement learning in portfolio management.
-+ main.py -  the entrance to run our training and testing framework
-+ ./saved_network- contains different saved models after training, with DDPG and PPO sub folders
-+ ./summary- contains summaries, also with DDPG and PPO sub folder
-+ ./agent- contains ddpg.py, ppo.py and ornstein_uhlenbeck.py(the noise we add to agent's actions during training)
-+ ./data- contains America.csv for USA stock data, China.csv for China stock data. download_data.py can download China stock data by Tushare. environment.py generates states data for trading agents.
-+ config.json- the configuration file for training or testing settings:
-```
-{
-	"data":{
-		"start_date":"2015-01-01",
-		"end_date":"2018-01-01",
-		"market_types":["stock"],
-		"ktype":"D"
-	},
-	"session":{
-		"start_date":"2015-01-05",
-		"end_date":"2017-01-01",
-		"market_types":"America",
-	    "codes":["AAPL","ADBE","BABA","SNE","V"],
-		"features":["close"],
-		"agents":["CNN","DDPG","3"],
-		"epochs":"10000",
-		"noise_flag":"False",
-		"record_flag":"False",
-		"plot_flag":"False",
-		"reload_flag":"False",
-		"trainable":"True",
-		"method":"model_free"
-	}
-}
+I use the popular Chinese sector indice of SWS http://www.swsindex.com/idx0130.aspx?columnid=8838. Actually there are 31 sectors. 
+
+
+
+config.json- the configuration file for training or testing settings:
+
+```javascript
+{"train_start_date": "2014-02-21", "train_end_date": "2018-04-27", "test_start_date": "2018-05-02", "test_end_date": "2019-04-30", "codes": ["801010.XSHE",    "801020.XSHE",    "801030.XSHE",    "801040.XSHE",    "801050.XSHE",    "801080.XSHE",    "801110.XSHE",    "801120.XSHE",    "801130.XSHE",    "801140.XSHE",    "801150.XSHE",    "801160.XSHE",    "801170.XSHE",    "801180.XSHE",    "801200.XSHE",    "801210.XSHE",    "801230.XSHE",    "801710.XSHE",    "801720.XSHE",    "801730.XSHE",    "801740.XSHE",    "801750.XSHE",    "801760.XSHE",    "801770.XSHE",    "801780.XSHE",    "801790.XSHE",    "801880.XSHE",    "801890.XSHE"]}
 ```
 
-Download stock data in shenzhen and shanghai stock market in the given period in Day(D) frequency. Options: hours, minutes
-```
-python main.py --mode=download_data
-```
-Training/Testing
-```
-python main.py --mode=train
-```
+## What's the results?
 
-```
-python main.py --mode=test
-```
-+ noise_flag=True: actions produced by RL agents are distorted by adding UO noise.
-+ record_flag=True: trading details would be stored as a csv file named by the epoch and cumulative return each epoch.
-+ plot_flag=True: the trend of wealth would be plot each epoch.
-+ reload_flag=True: tensorflow would search latest saved model in ./saved_network and reload.
-+ trainable=True: parameters would be updated during each epoch.
-+ method=model_based: the first epochs our agents would try to imitate a greedy strategy to quickly improve its performance. Then it would leave it and continue to self-improve by model-free reinforcement learning.
+![Sector Rotation](https://github.com/MRYingLEE/SectorRotationByRL/blob/master/report/sector%20rotation.png "Sector Rotation")
 
-## Result
-+ Training data (USA)
-  ![USA](result/USA.png)
+The results is not too bad. Actually, it is better than the one in the original repo.
 
-+ Training data (China)
-  ![China](result/China.png)
-
-+ Adversarial Training
-
-  ![noise](result/noise.png)
-
-+ Backtest (China)
-  ![Final](result/Final.png)
-
-  ![56](result/56.png)
-
-+ APV under different feature combinations
-  ![features_reward](result/features_reward.png)
-
-**The other results can be found in our paper.**
-(http://arxiv.org/abs/1808.09940)
+But, it is not as good as tradtional technical analysis. Years ago I have used RRG in Bloomberg terminal (https://www.relativerotationgraphs.com/partners/bloomberg) to do backtesting. The results was much better.
 
 
+# In future?
 
+1. (STATE) Different sector data. This time, the sectors are too many to deal with. Next time maybe I should try a market index with a few sub-sector indice.
 
+2. (STATE) Different time scale. This time, daily data was used. Pratically monthly data should be used. But if so, only hundreds of  train data is available.
 
-## Contribution
+3. (STATE) Indirect Data. Maybe we should use some technical indicators (such as RRG indicators) instead of price/return data.
 
-### Contributors
+4. (ACTION) Instead of weights, we may let the agent to choose 1 sector to overweight and 1 to underweight.
 
-* ***Zhipeng Liang***
-* ***Hao Chen***
-* ***Junhao Zhu***
-* ***Kangkang Jiang***
-* ***Yanran Li***
-### Institutions
+5. (REWARD) This time, an immediate return was used to as reward. Maybe we should try other ways, such as a reward to punish overtrading.
 
-+ ***AI&FintechLab of Likelihood Technology***
-+ ***Sun Yat-sen University***
+6. (ALGO) The algo should reflect the characterics of investment. Maybe we need investment specific algo.
 
-## Acknowledegment
-
-We would like to say thanks to ***Mingwen Liu*** from ***ShingingMidas Private Fund***, ***Zheng Xie*** and ***Xingyu Fu*** from ***Sun Yat-sen University*** for their generous guidance throughout the project.
-
-## Set up
-
-Python Version
-
-+ ***3.6***
-
-Modules needed
-
-+ ***tensorflow(tensorflow-gpu)***
-+ ***numpy*** 
-+ ***pandas*** 
-+ ***matplotlib***
-
-## Contact
-
-+ liangzhp6@mail2.sysu.edu.cn
-+ chenhao8@mail2.sysu.edu.cn
-+ zhujh25@mail2.sysu.edu.cn
-+ jiangkk3@mail2.sysu.edu.cn
-+ liyr8@mail2.sysu.edu.cn
+If I have some progress, I will update here.
