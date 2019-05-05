@@ -18,6 +18,7 @@ sns.set_style("darkgrid")
 
 eps=10e-8
 epochs=0
+
 M=0
 PATH_prefix=''
 
@@ -56,7 +57,8 @@ class StockTrader():
         w_history = pd.Series(self.w_history)
         p_history = pd.Series(self.p_history)
         history = pd.concat([wealth_history, r_history, w_history, p_history], axis=1)
-        history.to_csv(PATH_prefix+agent + '-'.join(codes) + '-' + str(math.exp(np.sum(self.r_history)) * 100) + '.csv')
+        #history.to_csv(PATH_prefix+agent + '-'.join(codes) + '-' + str(math.exp(np.sum(self.r_history)) * 100) + '.csv')
+        history.to_csv(PATH_prefix+agent + '-' + str(math.exp(np.sum(self.r_history)) * 100) + '.csv')
 
     def print_result(self,epoch,agent,noise_flag):
         self.total_reward=math.exp(self.total_reward) * 100
